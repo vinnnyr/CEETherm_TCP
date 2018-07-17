@@ -1,0 +1,3 @@
+[submodule "uModbus"]
+	path = uModbus
+	url = https://github.com/AdvancedClimateSystems/uModbus.git
