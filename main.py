@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import communicate
 import time
+import communicate
 
 xs = []
 ys = []
