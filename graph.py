@@ -12,6 +12,8 @@ from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from matplotlib import style
 
+import numpy as np
+
 style.use('ggplot')
 LARGE_FONT= ("Verdana", 12)
 
@@ -23,12 +25,19 @@ def dataStream():
     main.pullData()
     t = main.xs
     y = main.ys
-    return t,y
+    yMat = main.tempMat
+    return t,y,yMat
 
 def animate(i):
-    t,y = dataStream()
+    t,y,yMat = dataStream()
     a.clear()
-    a.plot(t,y)
+    #print(yMat)
+
+    a.plot(t,yMat.T[0])
+    a.plot(t,yMat.T[1])
+    a.plot(t,yMat.T[2])
+    a.plot(t,yMat.T[3])
+    
 
 class App(tk.Tk):
 
