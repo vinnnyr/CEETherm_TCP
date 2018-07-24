@@ -1,15 +1,34 @@
 #!/usr/bin/env python
 import Tkinter as tk
 
+import main
+
+# The usage of matplotlib TkAgg makes this only work on Windows. There is a chance of this working on all platforms if in Python 3
 import matplotlib
+import matplotlib.pyplot as plt
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
+import matplotlib.animation as animation
+from matplotlib import style
 
+style.use('ggplot')
 LARGE_FONT= ("Verdana", 12)
 
-def qf(quickPrint):
-    print(quickPrint)
+#Defining figure to look at:
+f = Figure(figsize=(5,5), dpi=100)
+a = f.add_subplot(111)
+
+def dataStream():
+    main.pullData()
+    t = main.xs
+    y = main.ys
+    return t,y
+
+def animate(i):
+    t,y = dataStream()
+    a.clear()
+    a.plot(t,y)
 
 class App(tk.Tk):
 
@@ -22,16 +41,17 @@ class App(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        self.frames = {}
+        self.frames = {} #All frames are stored here
         for F in (StartPage,GraphPage):
             frame = F(container,self)
             self.frames[F] = frame
             frame.grid(row=0,column=0,sticky="nsew")
-        self.show_frame(StartPage)
+        self.show_frame(StartPage) #Start with the start page
 
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+
 
 class StartPage(tk.Frame):
      
@@ -41,7 +61,7 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Start Page", font=LARGE_FONT)
         label.pack(pady=10,padx=10)
 
-        button = tk.Button(self, text="Visit Page 1", command = lambda : qf("Passing vars"))
+        button = tk.Button(self, text="Graph Page",command=lambda: controller.show_frame(GraphPage)) #Button for first graph page
         button.pack()
 
 class GraphPage(tk.Frame):
@@ -51,12 +71,12 @@ class GraphPage(tk.Frame):
         label = tk.Label(self,text="Graph Page!", font=LARGE_FONT)
         label.pack(pady=10,padx=10)
 
-        button1 = tk.Button(self,text="Back to Home", command = lambda : controller.show_frame(StartPage))
-        button1.pack()
+        button = tk.Button(self,text="Back to Home", command = lambda : controller.show_frame(StartPage))
+        button.pack()
 
-        f = Figure(figsize= (5,5), dpi=100)
-        a = f.add_subplot(111)
-        a.plot([1,2,3,4,5],[10,2,3,6,4])
+        # f = Figure(figsize= (5,5), dpi=100)
+        # a = f.add_subplot(111)
+        # a.plot([1,2,3,4,5],[10,2,3,6,4])
 
         canvas = FigureCanvasTkAgg(f,self)
         canvas.show()
@@ -65,5 +85,9 @@ class GraphPage(tk.Frame):
         toolbar = NavigationToolbar2TkAgg(canvas,self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand = True)
-mainApp = App()
-mainApp.mainloop()
+
+if __name__ == '__main__':
+    mainApp = App()
+    ani = animation.FuncAnimation(f, animate, interval=1000)
+    mainApp.mainloop()
+    main.communicate.close_sock() #Close the socket as soon as we are done (we close the window)
