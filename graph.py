@@ -22,7 +22,7 @@ f = Figure(figsize=(5,5), dpi=100)
 a = f.add_subplot(111)
 
 def dataStream():
-    main.pullData()
+    main.pullData(main.wts1)
     t = main.xs
     y = main.ys
     yMat = main.tempMat
@@ -33,18 +33,21 @@ def animate(i):
     a.clear()
     #print(yMat)
 
-    a.plot(t,yMat.T[0])
-    a.plot(t,yMat.T[1])
-    a.plot(t,yMat.T[2])
-    a.plot(t,yMat.T[3])
-    
+    l1, = a.plot(t,yMat.T[0],label="TC1")
+    l2, = a.plot(t,yMat.T[1],label="TC2")
+    l3, = a.plot(t,yMat.T[2],label="TC3")
+    l4, = a.plot(t,yMat.T[3],label="TC4")
+ 
+    #a.legend(handles=[l1,l2,l3,l4] )
+    #a.legend( )
+    a.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
 class App(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         
-        tk.Tk.__init__(self, *args, **kwargs)
-        
+        root = tk.Tk.__init__(self, *args, **kwargs)
+
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -82,10 +85,6 @@ class GraphPage(tk.Frame):
 
         button = tk.Button(self,text="Back to Home", command = lambda : controller.show_frame(StartPage))
         button.pack()
-
-        # f = Figure(figsize= (5,5), dpi=100)
-        # a = f.add_subplot(111)
-        # a.plot([1,2,3,4,5],[10,2,3,6,4])
 
         canvas = FigureCanvasTkAgg(f,self)
         canvas.show()

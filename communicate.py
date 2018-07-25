@@ -9,7 +9,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 def connect(ip):
     #ip = '10.0.2.137' #ip of the WTS
-    print(ip)
+    #print(ip)
     print("Attempting socket connection to " + ip)
     sock.connect((ip, 502))
     if sock:
