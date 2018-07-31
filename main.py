@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 import time
+import datetime
 import communicate
 import numpy as np
+import os
+import csv
+
 #import graph
 
 global xs
@@ -46,6 +50,19 @@ def pullData(wts):
     #tempMat[i] = temps
 
     i += 1
+def recordData():
+    time = str(datetime.datetime.now().strftime("%Y-%m-%dT%H.%M.%S")) #Removes ms element
+    path ="Data/" + time + ".csv"
+    with open(path,"w+") as f:
+            writer = csv.writer(f, delimiter=' ',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            for n in xs:
+                writer.writerow(xs[n] )
+
+    
+    f.close()
+    if f.closed:
+        print("Data saved as " + path)
+
 
 if __name__== '__main__':
     try:

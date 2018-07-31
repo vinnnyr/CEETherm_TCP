@@ -24,12 +24,11 @@ a = f.add_subplot(111)
 def dataStream():
     main.pullData(main.wts1)
     t = main.xs
-    y = main.ys
     yMat = main.tempMat
-    return t,y,yMat
+    return t,yMat
 
 def animate(i):
-    t,y,yMat = dataStream()
+    t,yMat = dataStream()
     a.clear()
     #print(yMat)
 
@@ -41,6 +40,7 @@ def animate(i):
     #a.legend(handles=[l1,l2,l3,l4] )
     #a.legend( )
     a.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+
 
 class App(tk.Tk):
 
@@ -80,10 +80,10 @@ class GraphPage(tk.Frame):
 
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent)
-        label = tk.Label(self,text="Graph Page!", font=LARGE_FONT)
+        label = tk.Label(self,text="Data View", font=LARGE_FONT)
         label.pack(pady=10,padx=10)
 
-        button = tk.Button(self,text="Back to Home", command = lambda : controller.show_frame(StartPage))
+        button = tk.Button(self,text="Home", command = lambda : controller.show_frame(StartPage))
         button.pack()
 
         canvas = FigureCanvasTkAgg(f,self)
@@ -96,6 +96,8 @@ class GraphPage(tk.Frame):
 
 if __name__ == '__main__':
     mainApp = App()
+    mainApp.geometry("1280x720")
     ani = animation.FuncAnimation(f, animate, interval=1000)
     mainApp.mainloop()
     main.communicate.close_sock() #Close the socket as soon as we are done (we close the window)
+    main.recordData()

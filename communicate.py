@@ -23,7 +23,7 @@ def send_message():
     except ValueError:
         print("Whoops... WTS seems to be not responding")
 
-def try_reset():
+def try_reset(): #Unused method I believe.
     print("Trying Reset")
     message = tcp.write_single_register(1, 253 , value = 1)
     print(message)
