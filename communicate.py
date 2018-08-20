@@ -13,7 +13,7 @@ def connect(ip):
     print("Attempting socket connection to " + ip)
     sock.connect((ip, 502))
     if sock:
-        print("Success!")
+        print("Connected!")
 
 def send_message():
     message = tcp.read_holding_registers(slave_id = 1, starting_address = 0, quantity = 4)
@@ -34,8 +34,10 @@ def try_reset(): #Unused method I believe.
         print("Reset didn't work")
 
 def close_sock():
+    # Shutdown socket before close
+    sock.shutdown(socket.SHUT_RDWR)
     sock.close()
-    print(" \n Socket successfully closed")
+    print(" \nSocket successfully closed")
 
 
 

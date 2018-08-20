@@ -97,7 +97,10 @@ class GraphPage(tk.Frame):
 if __name__ == '__main__':
     mainApp = App()
     mainApp.geometry("1280x720")
-    ani = animation.FuncAnimation(f, animate, interval=1000)
+    try:
+        ani = animation.FuncAnimation(f, animate, interval=1000)
+    except:
+        print("WTS not reporting correct data")
     mainApp.mainloop()
     main.communicate.close_sock() #Close the socket as soon as we are done (we close the window)
     main.recordData()
