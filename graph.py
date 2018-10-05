@@ -4,6 +4,7 @@ import Tkinter as tk
 import main
 
 # The usage of matplotlib TkAgg makes this only work on Windows. There is a chance of this working on all platforms if in Python 3
+#This is ONLY to visualize, does not implement any polling fucntionality on it's own
 import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use("TkAgg")
@@ -103,4 +104,4 @@ if __name__ == '__main__':
         print("WTS not reporting correct data")
     mainApp.mainloop()
     main.communicate.close_sock() #Close the socket as soon as we are done (we close the window)
-    main.recordData()
+    #main.recordData()

@@ -7,7 +7,6 @@ import os
 import csv
 
 #import graph
-
 global xs
 global ys
 global tempMat
@@ -19,7 +18,7 @@ ys = []
 tempMat = []
 i = 0
 
-class WirelessSensor:
+class WirelessSensor: #This is a class we use to define the temperature sensor values
     def __init__(self,_ip):
         self.ip = _ip
         self.scaleValue = 16 #This is the temperature scale value we believe will work
@@ -28,10 +27,7 @@ class WirelessSensor:
         response = communicate.send_message()
         return response
 
-
-#communicate.connect(ip = '10.0.2.137')
-#wts1 = WirelessSensor("10.0.2.137")
-wts1 = WirelessSensor("10.0.2.142")
+wts1 = WirelessSensor("10.0.2.142") #The IP of the module we are interested in
 def pullData(wts):
     global i
     global xs
@@ -41,19 +37,19 @@ def pullData(wts):
     response = wts.sendMessage()
     #print(response)
     try:
-        temps = [(float(t)/wts.scaleValue) for t in response]
-        xs.append(i)
-        ys.append(temps[0])
-        if i==0:
+        temps = [(float(t)/wts.scaleValue) for t in response] #Temperature in degF
+        xs.append(i) #Vector of indexes
+        ys.append(temps[0]) #Vector of temperatures
+        if i==0: #If this is the first, create the array
             tempMat = np.array(temps)
-        else:
+        else:#If not, stack the values vertically so we have history
             tempMat = np.vstack((tempMat,temps))
         #tempMat[i] = temps
     except TypeError:
         print("Connection must not be going through")
         pass
     i += 1
-def recordData():
+def recordData(): #This method is not used as of 10/05
     global xs
     global ys
 
@@ -72,9 +68,9 @@ def recordData():
 
 if __name__== '__main__':
     try:
-        while True:
-            time.sleep(0.5)
-            pullData(wts1)
+        while True: #Main loop
+            time.sleep(0.5) #Delay
+            pullData(wts1) #pull data, store in global variables
     except KeyboardInterrupt:
         communicate.close_sock()
         pass
