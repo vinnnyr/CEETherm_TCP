@@ -27,7 +27,6 @@ class WirelessSensor: #This is a class we use to define the temperature sensor v
         response = communicate.send_message()
         return response
 
-wts1 = WirelessSensor("10.0.2.142") #The IP of the module we are interested in
 def pullData(wts):
     global i
     global xs
@@ -37,7 +36,8 @@ def pullData(wts):
     response = wts.sendMessage()
     #print(response)
     try:
-        temps = [(float(t)/wts.scaleValue) for t in response] #Temperature in degF
+        temps = [(float(t)/wts.scaleValue) for t in response] #Temperature in deg C
+        print(temps)
         xs.append(i) #Vector of indexes
         ys.append(temps[0]) #Vector of temperatures
         if i==0: #If this is the first, create the array
@@ -49,28 +49,14 @@ def pullData(wts):
         print("Connection must not be going through")
         pass
     i += 1
-def recordData(): #This method is not used as of 10/05
-    global xs
-    global ys
 
-    time = str(datetime.datetime.now().strftime("%Y-%m-%dT%H.%M.%S")) #Removes ms element
-    path ="Data/" + time + ".csv"
-    with open(path,"w+") as f:
-            writer = csv.writer(f, delimiter=' ',quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            for n in xs:
-                writer.writerow( ["Washington", "16:35", 26, 85, xs[n]] )
-
-    
-    f.close()
-    if f.closed:
-        print("Data saved as " + path)
-
+wts1 = WirelessSensor("10.0.2.151") #The IP of the module we are interested in (Exhaust Air Temperature)
 
 if __name__== '__main__':
     try:
         while True: #Main loop
             time.sleep(0.5) #Delay
             pullData(wts1) #pull data, store in global variables
-    except KeyboardInterrupt:
+    except KeyboardInterrupt: # ctrl + c
         communicate.close_sock()
         pass
